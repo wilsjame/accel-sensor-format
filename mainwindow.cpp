@@ -1,5 +1,6 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
+#include <QFileDialog>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -17,6 +18,7 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
+// trim out file extenstion and display path preview
 void MainWindow::on_lineEdit_glink_file_path_textChanged()
 {
     glink_file = ui->lineEdit_glink_file_path->text();
@@ -28,4 +30,10 @@ void MainWindow::on_lineEdit_glink_file_path_textChanged()
 
     // display out file preview
     ui->label_glink_format_file_path->setText(QString::fromStdString(glink_out_file));
+}
+
+// use file explorer to find file to format
+void MainWindow::on_pushButton_glink_file_path_clicked()
+{
+    ui->lineEdit_glink_file_path->setText(QFileDialog::getOpenFileName(this, "Select G-Link-200 file to format", QDir::homePath()));
 }

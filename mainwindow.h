@@ -17,6 +17,7 @@ public:
 
 private slots:
     void on_lineEdit_glink_file_path_textChanged();
+    void on_pushButton_glink_file_path_clicked();
 
 private:
     Ui::MainWindow *ui;
