@@ -1,6 +1,9 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include <QFileDialog>
+#include <iostream>
+#include <fstream>
+#include <sstream>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -9,7 +12,7 @@ MainWindow::MainWindow(QWidget *parent)
     ui->setupUi(this);
 
     // start up
-    // G-Link-200
+    // G-Link
     connect(ui->lineEdit_glink_file_path, SIGNAL(textChange(QString)), this, SLOT(on_lineEdit_glink_file_path_textChanged()));
 }
 
@@ -35,5 +38,59 @@ void MainWindow::on_lineEdit_glink_file_path_textChanged()
 // use file explorer to find file to format
 void MainWindow::on_pushButton_glink_file_path_clicked()
 {
-    ui->lineEdit_glink_file_path->setText(QFileDialog::getOpenFileName(this, "Select G-Link-200 file to format", QDir::homePath()));
+    ui->lineEdit_glink_file_path->setText(QFileDialog::getOpenFileName(this, "Select G-Link file to format", QDir::homePath()));
+}
+
+// format glink data into tab delimited acceleration data
+void MainWindow::on_pushButton_glink_format_clicked()
+{
+    std::ofstream outFile(glink_out_file);
+    std::ifstream inFile(glink_file.toStdString());
+    std::string line, value, temp;
+    std::vector<std::string> row;
+
+    // parse header
+    while (line != "DATA_START")
+    {
+        std::getline(inFile, line);
+    }
+
+    std::getline(inFile, line); // additional line before data
+
+    // parse data
+    std::stringstream ss;
+
+    //TODO verify tabs
+    while (std::getline(inFile, line))
+    {
+        row.clear();
+        std::stringstream ss(line);
+
+        while (std::getline(ss, value, ','))
+        {
+            row.push_back(value);
+        }
+
+        row.erase(row.begin() + 0); // erase time stamp
+
+        for (auto i = row.begin(); i != row.end(); ++i)
+        {
+
+            if (next(i) != row.end())
+            {
+                //std::cout << *i << '\t';
+                outFile << *i << '\t' << std::flush;
+            }
+            else
+            {
+                //std::cout << *i;
+                outFile << *i << std::flush;
+            }
+
+        }
+
+        //std::cout << std::endl;
+        outFile << std::endl;
+    }
+
 }

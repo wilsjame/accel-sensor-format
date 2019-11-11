@@ -18,11 +18,12 @@ public:
 private slots:
     void on_lineEdit_glink_file_path_textChanged();
     void on_pushButton_glink_file_path_clicked();
+    void on_pushButton_glink_format_clicked();
 
 private:
     Ui::MainWindow *ui;
 
-    // G-Link-200
+    // G-Link
     QString glink_file;
     std::string glink_out_file;
 
