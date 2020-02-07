@@ -4,6 +4,7 @@
 #include <iostream>
 #include <fstream>
 #include <sstream>
+#include <QDebug>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -21,7 +22,14 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
-// trim out file extenstion and display path preview
+// *** G-Link ***
+// use file explorer to find file to format
+void MainWindow::on_pushButton_glink_file_path_clicked()
+{
+    ui->lineEdit_glink_file_path->setText(QFileDialog::getOpenFileName(this, "Select G-Link file to format", QDir::homePath()));
+}
+
+// trim out file extension and display path preview
 void MainWindow::on_lineEdit_glink_file_path_textChanged()
 {
     glink_file = ui->lineEdit_glink_file_path->text();
@@ -33,12 +41,6 @@ void MainWindow::on_lineEdit_glink_file_path_textChanged()
 
     // display out file preview
     ui->label_glink_format_file_path->setText(QString::fromStdString(glink_out_file));
-}
-
-// use file explorer to find file to format
-void MainWindow::on_pushButton_glink_file_path_clicked()
-{
-    ui->lineEdit_glink_file_path->setText(QFileDialog::getOpenFileName(this, "Select G-Link file to format", QDir::homePath()));
 }
 
 // format glink data into tab delimited acceleration data
@@ -92,5 +94,49 @@ void MainWindow::on_pushButton_glink_format_clicked()
         //std::cout << std::endl;
         outFile << std::endl;
     }
+
+}
+
+// *** BioStamp ***
+
+// use file explorer to find files to format and combine
+void MainWindow::on_pushButton_biostamp_left_arm_file_path_clicked()
+{
+    ui->lineEdit_biostamp_left_arm_file_path->setText(QFileDialog::getOpenFileName(this, "Select BioStamp left arm accel.csv", QDir::homePath()));
+}
+
+void MainWindow::on_pushButton_biostamp_right_arm_file_path_clicked()
+{
+    ui->lineEdit_biostamp_right_arm_file_path->setText(QFileDialog::getOpenFileName(this, "Select BioStamp right arm accel.csv", QDir::homePath()));
+}
+
+void MainWindow::on_pushButton_biostamp_torso_file_path_clicked()
+{
+    ui->lineEdit_biostamp_torso_file_path->setText(QFileDialog::getOpenFileName(this, "Select BioStamp torso accel.csv", QDir::homePath()));
+}
+
+// get the file names for left arm, right arm, and torso data sets
+void MainWindow::on_lineEdit_biostamp_left_arm_file_path_textChanged(const QString &arg1)
+{
+    biostamp_file_left_arm = arg1;
+}
+
+void MainWindow::on_lineEdit_biostamp_right_arm_file_path_textChanged(const QString &arg1)
+{
+    biostamp_file_right_arm = arg1;
+}
+
+void MainWindow::on_lineEdit_biostamp_torso_file_path_textChanged(const QString &arg1)
+{
+    biostamp_file_torso = arg1;
+}
+
+// format
+void MainWindow::on_pushButton_biostamp_format_clicked()
+{
+
+    //TODO check left arm, right arm, and torso file paths are populated
+
+    Samples samples;
 
 }
