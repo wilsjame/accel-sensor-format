@@ -72,20 +72,10 @@ void MainWindow::on_pushButton_glink_format_clicked()
         std::getline(inFile, line);
     }
 
-    for (int i=0; i<1000; i++)
-    {
-        std::getline(inFile, line);
-        outFile << line;
-        outFile << std::endl;
-    }
-
-    /*
     while (std::getline(inFile, line))
     {
-        outFile << line;
+        outFile << line << std::endl;
     }
-    */
-    outFile << std::endl;
 
 }
 
